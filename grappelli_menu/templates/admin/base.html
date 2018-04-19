@@ -10,9 +10,7 @@
     {% block stylesheets %}
         <link href="{% static "grappelli/jquery/ui/jquery-ui.min.css" %}" rel="stylesheet" type="text/css" media="screen" />
         <link href="{% static "grappelli/stylesheets/screen.css" %}" rel="stylesheet" type="text/css" media="all" />
-        {% if user.is_authenticated %}
-            <link href="{% static "grappelli_menu/css/side-bar-menu.css" %}" rel="stylesheet" type="text/css" media="screen" />
-        {% endif %}
+        <link href="{% static "grappelli_menu/css/side-bar-menu.css" %}" rel="stylesheet" type="text/css" media="screen" />
         {% if LANGUAGE_BIDI %}
             <link href="{% static "grappelli/stylesheets/mueller/grid/output-rtl.css" %}" rel="stylesheet" type="text/css" media="screen" />
             <link href="{% block stylesheet_rtl %}{% static "grappelli/stylesheets/rtl.css" %}{% endblock %}" rel="stylesheet" type="text/css" media="screen" />
@@ -142,10 +140,11 @@
             </header>
 
         <!-- SIDE MENU -->
-        {% if user.is_authenticated %}
+        {% block sidemenu %}
+        <aside class="side-bar-menu" id="main-menu">
             {% admin_apps %}
-            <aside class="side-bar-menu" id="main-menu">
                 <ul id="yw2">
+                {% if user.is_authenticated %}
                 {% for app in admin_app_list %}
                     <li class="has-dropdown not-click"><a href="{{ app.app_url }}">{% trans app.name %}</a>
                     <ul class="dropdown">
@@ -156,9 +155,13 @@
                 {% empty %}
                     <p>{% trans "You don´t have permission to edit anything." %}</p>
                 {% endfor %}
+                {% endif %}
+                <!-- test1 -->
+                {% block extraside %}{% endblock %}
+                <!-- test2 -->
                 </ul>
             </aside>
-	{% endif %}
+        {% endblock %}
         {% endblock %}
 
         <!-- CONTENT -->
